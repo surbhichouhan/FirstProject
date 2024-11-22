@@ -31,7 +31,6 @@ pipeline {
             when {
                 // Only proceed with merge if the build was successful
                 branch "${FEATURE_BRANCH}"
-                echo "we are in feature1 branch"
             }
             steps {
                 script {
