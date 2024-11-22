@@ -69,3 +69,4 @@ expression { return currentBuild.result == null || currentBuild.result == 'SUCCE
         }
     }
 }
+//check
