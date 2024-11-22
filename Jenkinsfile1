@@ -21,8 +21,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Run your build command here (e.g., Maven, Gradle, etc.)
-                    sh 'mvn clean install' // or your build tool's command
+                    // Run your build command here using bat (for Windows)
+                    bat 'mvn clean install' // or your build tool's command (adjust as needed)
                 }
             }
         }
@@ -35,14 +35,14 @@ pipeline {
             }
             steps {
                 script {
-                    // Checkout master branch
-                    sh "git checkout ${MASTER_BRANCH}"
-                    
-                    // Merge feature branch into master
-                    sh "git merge ${FEATURE_BRANCH}"
+                    // Checkout master branch (Windows)
+                    bat "git checkout ${MASTER_BRANCH}"
 
-                    // Push the merged code to the master branch
-                    sh "git push origin ${MASTER_BRANCH}"
+                    // Merge feature branch into master (Windows)
+                    bat "git merge ${FEATURE_BRANCH}"
+
+                    // Push the merged code to the master branch (Windows)
+                    bat "git push origin ${MASTER_BRANCH}"
                 }
             }
         }
