@@ -22,7 +22,8 @@ pipeline {
             steps {
                 script {
                     // Run your build command here using bat (for Windows)
-                    bat 'mvn clean install' // or your build tool's command (adjust as needed)
+                    bat 'git checkout ${FEATURE_BRANCH}'
+                    bat 'mvn clean package' // or your build tool's command (adjust as needed)
                 }
             }
         }
@@ -31,6 +32,7 @@ pipeline {
             when {
                 // Only proceed with merge if the build was successful
                 branch "${FEATURE_BRANCH}"
+                buildingTag false
             }
             steps {
                 script {
