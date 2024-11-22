@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define your Git repository and branches here
+        FEATURE_BRANCH = "/feature"
+        MASTER_BRANCH = "master"  // Use 'master' if that's your default branch
+        GIT_CREDENTIALS = 'surbhichouhan' // Your Jenkins Git credentials
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout the feature branch
+                    git branch: "${FEATURE_BRANCH}", credentialsId: "${GIT_CREDENTIALS}", url: 'https://github.com/surbhichouhan/FirstProject.git'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Run your build command here (e.g., Maven, Gradle, etc.)
+                    sh 'mvn clean install' // or your build tool's command
+                }
+            }
+        }
+
+        stage('Merge to Master') {
+            when {
+                // Only proceed with merge if the build was successful
+                branch "${FEATURE_BRANCH}"
+                beforeAgent true
+            }
+            steps {
+                script {
+                    // Checkout master branch
+                    sh "git checkout ${MASTER_BRANCH}"
+                    
+                    // Merge feature branch into master
+                    sh "git merge ${FEATURE_BRANCH}"
+
+                    // Push the merged code to the master branch
+                    sh "git push origin ${MASTER_BRANCH}"
+                }
+            }
+        }
+
+        stage('Notify Success') {
+            steps {
+                echo "Build was successful and feature branch merged into master."
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and merge were successful.'
+        }
+
+        failure {
+            echo 'Build failed.'
+        }
+    }
+}
