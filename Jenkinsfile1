@@ -31,8 +31,9 @@ pipeline {
         stage('Merge to Master') {
             when {
                 // Only proceed with merge if the build was successful
-                branch "${FEATURE_BRANCH}"
-                buildingTag false
+               // branch "${FEATURE_BRANCH}"
+                //buildingTag false
+expression { return currentBuild.result == null || currentBuild.result == 'SUCCESS' }
             }
             steps {
                 script {
