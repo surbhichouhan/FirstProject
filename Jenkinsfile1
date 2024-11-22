@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Run your build command here using bat (for Windows)
-                    bat 'git checkout ${FEATURE_BRANCH}'
+                   // bat 'git checkout ${FEATURE_BRANCH}'
                     bat 'mvn clean package' // or your build tool's command (adjust as needed)
                 }
             }
