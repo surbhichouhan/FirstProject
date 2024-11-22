@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define your Git repository and branches here
-        FEATURE_BRANCH = "*/feature/*"
+        FEATURE_BRANCH = "/feature1"
         MASTER_BRANCH = "master"  // Use 'master' if that's your default branch
         GIT_CREDENTIALS = 'surbhichouhan' // Your Jenkins Git credentials
     }
