@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define your Git repository and branches here
+        FEATURE_BRANCH = "feature1"
+        MASTER_BRANCH = "master"  // Use 'master' if that's your default branch
+        GIT_CREDENTIALS = 'surbhichouhan' // Your Jenkins Git credentials
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout the feature branch
+                    git branch: "${FEATURE_BRANCH}", credentialsId: "${GIT_CREDENTIALS}", url: 'https://github.com/surbhichouhan/FirstProject.git'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Run your build command here using bat (for Windows)
+                   // bat 'git checkout ${FEATURE_BRANCH}'
+                    bat 'mvn clean package' // or your build tool's command (adjust as needed)
+                }
+            }
+        }
+
+        stage('Merge to Master') {
+            when {
+                // Only proceed with merge if the build was successful
+               // branch "${FEATURE_BRANCH}"
+                //buildingTag false
+expression { return currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+            }
+            steps {
+                script {
+                    // Checkout master branch (Windows)
+                    bat "git checkout ${MASTER_BRANCH}"
+
+                   // Pull the latest changes for master to make sure we have the latest updates
+                  //  bat "git pull origin ${MASTER_BRANCH}"
+
+                    // Merge feature branch into master (Windows)
+                    bat "git merge ${FEATURE_BRANCH}"
+
+                    // Push the merged code to the master branch (Windows)
+                    bat "git push origin ${MASTER_BRANCH}"
+                }
+            }
+        }
+
+        stage('Notify Success') {
+            steps {
+                echo "Build was successful and feature branch merged into master."
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and merge were successful.'
+        }
+
+        failure {
+            echo 'Build failed.'
+        }
+    }
+}
