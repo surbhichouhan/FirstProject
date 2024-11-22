@@ -38,6 +38,9 @@ pipeline {
                     // Checkout master branch (Windows)
                     bat "git checkout ${MASTER_BRANCH}"
 
+                   // Pull the latest changes for master to make sure we have the latest updates
+                  //  bat "git pull origin ${MASTER_BRANCH}"
+
                     // Merge feature branch into master (Windows)
                     bat "git merge ${FEATURE_BRANCH}"
 
